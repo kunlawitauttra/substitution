@@ -18,7 +18,6 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-
     - name: Sync Key Vault Secrets
       run: |
         # Source Key Vault
@@ -44,14 +43,21 @@ jobs:
           notBefore=$(date -u -d "$notBefore" '+%Y-%m-%dT%H:%M:%SZ')
           expires=$(date -u -d "$expires" '+%Y-%m-%dT%H:%M:%SZ')
 
-          # Set the secret
-          az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --not-before "$notBefore" --expires "$expires" --output none
+          # Check if the secret exists in the destination Key Vault
+          secretExists=$(az keyvault secret show --vault-name $destinationKeyVault --name $secret --output none 2>&1)
 
-          # Enable or disable the secret based on the 'enabled' flag
-          if [ "$enabled" = "true" ]; then
-            az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled true --output none
+          if [ $? -eq 0 ]; then
+            echo "Secret $secret already exists in the destination Key Vault. Skipping..."
           else
-            az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled false --output none
+            # Set the secret
+            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --not-before "$notBefore" --expires "$expires" --output none
+
+            # Enable or disable the secret based on the 'enabled' flag
+            if [ "$enabled" = "true" ]; then
+              az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled true --output none
+            else
+              az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled false --output none
+            fi
           fi
         done
 
