@@ -1,1 +1,36 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-keyvault:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check Azure CLI version
+      run: az --version
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Sync Key Vault Secrets
+      run: |
+        # Set variables
+        sourceKeyVault=kunlawitvault
+        destinationKeyVault=kunlawitvault02
+
+        # Get list of secrets from the source Key Vault
+        secrets=$(az keyvault secret list --vault-name $sourceKeyVault --query "[].id" --output tsv)
+
+        # Loop through each secret and copy to the destination Key Vault
+        for secretId in $secrets; do
+          secretName=$(basename $secretId)
+          secretInfo=$(az keyvault secret show --vault-name $sourceKeyVault --name $secretName --query "{type:type,enabled:attributes.enabled,expires:attributes.expires,tags:tags,value:value}" --output json)
+          az keyvault secret set --vault-name $destinationKeyVault --name $secretName --query "id" --value "$secretInfo"
+        done
 
