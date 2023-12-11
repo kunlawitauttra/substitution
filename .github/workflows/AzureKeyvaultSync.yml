@@ -18,48 +18,21 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Sync Key Vault Secrets
-      run: |
-        # Source Key Vault
-        sourceKeyVault="kunlawitvault"
-        
-        # Destination Key Vault
-        destinationKeyVault="kunlawitvault02"
 
-        # List secrets from source Key Vault
-        secrets=$(az keyvault secret list --vault-name $sourceKeyVault --query '[].name' --output tsv)
+    - name: Sync secrets
+      run: |
+        srcKeyVault="kunlawitvault"
+        destKeyVault="kunlawitvault02"
+        
+        # Get list of secrets from source Key Vault
+        secrets=$(az keyvault secret list --vault-name $srcKeyVault --query '[].name' --output tsv)
 
         # Loop through secrets and copy to destination Key Vault
-        for secret in $secrets; do
-          secretProperties=$(az keyvault secret show --vault-name $sourceKeyVault --name $secret --query "{value: value, contentType: contentType, tags: tags, enabled: attributes.enabled, notBefore: attributes.notBefore, expires: attributes.expires}" --output json)
-          value=$(echo $secretProperties | jq -r '.value')
-          contentType=$(echo $secretProperties | jq -r '.contentType')
-          tags=$(echo $secretProperties | jq -r '.tags')
-          enabled=$(echo $secretProperties | jq -r '.enabled')
-          notBefore=$(echo $secretProperties | jq -r '.notBefore')
-          expires=$(echo $secretProperties | jq -r '.expires')
+        for secret in $secrets
+        do
+          # Get secret value from source Key Vault
+          secretValue=$(az keyvault secret show --name $secret --vault-name $srcKeyVault --query 'value' --output tsv)
 
-          # Format dates
-          notBefore=$(date -u -d "$notBefore" '+%Y-%m-%dT%H:%M:%SZ')
-          expires=$(date -u -d "$expires" '+%Y-%m-%dT%H:%M:%SZ')
-
-          # Check if the secret exists in the destination Key Vault
-          secretExists=$(az keyvault secret show --vault-name $destinationKeyVault --name $secret --output none 2>&1)
-
-          if [ $? -eq 0 ]; then
-            echo "Secret $secret already exists in the destination Key Vault. Skipping..."
-          else
-            # Set the secret
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --not-before "$notBefore" --expires "$expires" --output none
-
-            # Enable or disable the secret based on the 'enabled' flag
-            if [ "$enabled" = "true" ]; then
-              az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled true --output none
-            else
-              az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled false --output none
-            fi
-          fi
+          # Set secret in destination Key Vault
+          az keyvault secret set --vault-name $destKeyVault --name $secret --value "$secretValue"
         done
-
-      env:
-        AZURE_KEYVAULT_URI: https://$sourceKeyVault.vault.azure.net/
