@@ -13,11 +13,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Azure CLI
-      uses: azure/cli@v1
-      with:
-        azcliversion: 2.28.0  # You may adjust the version as needed
-
     - name: Login to Azure
       run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
 
