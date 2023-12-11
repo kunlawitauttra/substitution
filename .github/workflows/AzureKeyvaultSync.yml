@@ -44,11 +44,14 @@ jobs:
           notBefore=$(date -u -d "$notBefore" '+%Y-%m-%dT%H:%M:%SZ')
           expires=$(date -u -d "$expires" '+%Y-%m-%dT%H:%M:%SZ')
 
-          # Set the secret, considering the enabled flag
+          # Set the secret
+          az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --not-before "$notBefore" --expires "$expires" --output none
+
+          # Enable or disable the secret based on the 'enabled' flag
           if [ "$enabled" = "true" ]; then
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --enabled --not-before "$notBefore" --expires "$expires" --output none
+            az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled true --output none
           else
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --not-before "$notBefore" --expires "$expires" --enabled false --output none
+            az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled false --output none
           fi
         done
 
