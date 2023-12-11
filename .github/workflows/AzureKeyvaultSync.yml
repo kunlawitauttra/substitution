@@ -18,30 +18,26 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
+
     - name: Sync Key Vault Secrets
       run: |
-        # Replace the placeholder values with your actual Key Vault names
+        # Source Key Vault
         sourceKeyVault="kunlawitvault"
+        
+        # Destination Key Vault
         destinationKeyVault="kunlawitvault02"
 
-        # Fetch the list of secret names from the source Key Vault
-        secrets=$(az keyvault secret list --vault-name $sourceKeyVault --query "[].name" --output tsv)
+        # List secrets from source Key Vault
+        secrets=$(az keyvault secret list --vault-name $sourceKeyVault --query '[].name' --output tsv)
 
-        # Loop through the secrets and sync them to the destination Key Vault
+        # Loop through secrets and copy to destination Key Vault
         for secret in $secrets; do
-          echo "Syncing secret: $secret"
-          secretId=$(az keyvault secret show --vault-name $sourceKeyVault --name $secret --query "id" --output tsv)
-          secretType=$(az keyvault secret show --id $secretId --query "contentType" --output tsv)
-          secretExpiration=$(az keyvault secret show --id $secretId --query "expires" --output tsv || echo "")
-          secretTags=$(az keyvault secret show --id $secretId --query "tags" --output tsv)
-          secretStatus=$(az keyvault secret show --id $secretId --query "enabled" --output tsv)
-          
-          # Set the secret in the destination Key Vault
-          if [ -z "$secretExpiration" ]; then
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$(az keyvault secret show --id $secretId --query "value" --output tsv)" --content-type "$secretType" --tags "$secretTags" > /dev/null
-          else
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$(az keyvault secret show --id $secretId --query "value" --output tsv)" --content-type "$secretType" --expires "$secretExpiration" --tags "$secretTags" > /dev/null
-          fi
+          az keyvault secret show --vault-name $sourceKeyVault --name $secret --query "{value: value, contentType: contentType, tags: tags, enabled: attributes.enabled, notBefore: attributes.notBefore, expires: attributes.expires}" --output json |
+          az keyvault secret set --vault-name $destinationKeyVault --name $secret --output none
+        done
+
+      env:
+        AZURE_KEYVAULT_URI: https://$sourceKeyVault.vault.azure.net/
 
           # Set the secret status separately using az keyvault secret set-attributes
           az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled $secretStatus > /dev/null
