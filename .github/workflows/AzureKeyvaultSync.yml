@@ -31,6 +31,6 @@ jobs:
         for secret in $secrets; do
           echo "Syncing secret: $secret"
           secretId=$(az keyvault secret show --vault-name $sourceKeyVault --name $secret --query "id" --output tsv)
-          secretValue=$(az keyvault secret show --id $secretId --query "value" --output tsv)
-          az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue"
+          secretValue="***"
+          az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" > /dev/null
         done
