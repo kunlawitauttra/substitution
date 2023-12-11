@@ -39,6 +39,10 @@ jobs:
           notBefore=$(echo $secretProperties | jq -r '.notBefore')
           expires=$(echo $secretProperties | jq -r '.expires')
 
+          # Format dates
+          notBefore=$(date -u -d "$notBefore" '+%Y-%m-%dT%H:%M:%SZ')
+          expires=$(date -u -d "$expires" '+%Y-%m-%dT%H:%M:%SZ')
+
           az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$value" --content-type "$contentType" --tags "$tags" --enabled $enabled --not-before "$notBefore" --expires "$expires" --output none
         done
 
