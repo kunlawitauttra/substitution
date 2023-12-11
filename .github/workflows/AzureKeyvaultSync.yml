@@ -33,17 +33,14 @@ jobs:
           secretId=$(az keyvault secret show --vault-name $sourceKeyVault --name $secret --query "id" --output tsv)
           secretType=$(az keyvault secret show --id $secretId --query "contentType" --output tsv)
           secretExpiration=$(az keyvault secret show --id $secretId --query "expires" --output tsv || echo "")
-          secretTags=$(az keyvault secret show --id $secretId --query "tags" --output json)
+          secretTags=$(az keyvault secret show --id $secretId --query "tags" --output tsv)
           secretStatus=$(az keyvault secret show --id $secretId --query "enabled" --output tsv)
           
-          # Mask the actual secret value
-          secretValue="***"
-
           # Set the secret in the destination Key Vault
           if [ -z "$secretExpiration" ]; then
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" --content-type "$secretType" --tags "$secretTags" > /dev/null
+            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$(az keyvault secret show --id $secretId --query "value" --output tsv)" --content-type "$secretType" --tags "$secretTags" > /dev/null
           else
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" --content-type "$secretType" --expires "$secretExpiration" --tags "$secretTags" > /dev/null
+            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$(az keyvault secret show --id $secretId --query "value" --output tsv)" --content-type "$secretType" --expires "$secretExpiration" --tags "$secretTags" > /dev/null
           fi
 
           # Set the secret status separately using az keyvault secret set-attributes
