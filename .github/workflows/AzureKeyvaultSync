@@ -1,0 +1,39 @@
+name: Sync Key Vault Data
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-keyvault:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Azure CLI
+      uses: azure/cli@v1
+      with:
+        azcliversion: 2.28.0  # You may adjust the version as needed
+
+    - name: Login to Azure
+      run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+    - name: Sync data from source to destination Key Vault
+      run: |
+        sourceKeyVault=kunlawitvault
+        destinationKeyVault=kunlawitvault02
+
+        # Get a list of secrets in the source Key Vault
+        sourceSecrets=$(az keyvault secret list --vault-name $sourceKeyVault --query '[].name' -o tsv)
+
+        # Loop through each secret and copy it to the destination Key Vault
+        for secretName in $sourceSecrets; do
+          az keyvault secret show --vault-name $sourceKeyVault --name $secretName --query '[value]' --o tsv | \
+            az keyvault secret set --vault-name $destinationKeyVault --name $secretName --value @- --o none
+        done
+
+    - name: Logout from Azure
+      run: az logout
