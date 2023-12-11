@@ -31,10 +31,10 @@ jobs:
         do
           # Get secret value from source Key Vault
           secretValue=$(az keyvault secret show --name $secret --vault-name $srcKeyVault --query 'value' --output tsv)
+          
+          # Mask the secret value in logs using a placeholder
+          echo "Syncing secret: $secret - Value: $::add-mask::placeholder"
 
-          # Mask the secret value in logs
-          echo "Syncing secret: $secret - Value: $::add-mask::$secretValue"
-
-          # Set secret in destination Key Vault
+          # Set secret in destination Key Vault with the actual value
           az keyvault secret set --vault-name $destKeyVault --name $secret --value "$secretValue"
         done
