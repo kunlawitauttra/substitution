@@ -17,19 +17,18 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Sync data from source to destination Key Vault
+    - name: Sync Key Vault Secrets
       run: |
-        sourceKeyVault=kunlawitvault
-        destinationKeyVault=kunlawitvault02
+        # Replace the placeholder values with your actual Key Vault names
+        sourceKeyVault="kunlawitvault"
+        destinationKeyVault="kunlawitvault02"
 
-        # Get a list of secrets in the source Key Vault
-        sourceSecrets=$(az keyvault secret list --vault-name $sourceKeyVault --query '[].name' -o tsv)
+        # Fetch the list of secret names from the source Key Vault
+        secrets=$(az keyvault secret list --vault-name $sourceKeyVault --query "[].name" --output tsv)
 
-        # Loop through each secret and copy it to the destination Key Vault
-        for secretName in $sourceSecrets; do
-          az keyvault secret show --vault-name $sourceKeyVault --name $secretName --query '[value]' --output tsv | \ \
-          az keyvault secret set --vault-name $destinationKeyVault --name $secretName --value @- --output none || exit 1
+        # Loop through the secrets and sync them to the destination Key Vault
+        for secret in $secrets; do
+          echo "Syncing secret: $secret"
+          secretValue=$(az keyvault secret show --vault-name $sourceKeyVault --name $secret --query "value" --output tsv)
+          az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue"
         done
-
-    - name: Logout from Azure
-      run: az logout
