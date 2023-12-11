@@ -19,6 +19,15 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - name: Set Azure environment
+      run: az cloud set -n AzureCloud
+
+    - name: Configure Azure defaults
+      run: az configure --defaults group=default
+
+    - name: Check Azure CLI version
+      run: az --version
+
     - name: Sync data from source to destination Key Vault
       run: |
         sourceKeyVault=kunlawitvault
