@@ -11,8 +11,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Azure login
-      id: login
-      uses: azure/login@v1.4.3
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Check Azure CLI version
+      run: az --version
+
+    # - name: Azure login
+    #   id: login
+    #   uses: azure/login@v1.4.3
+    #   with:
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
