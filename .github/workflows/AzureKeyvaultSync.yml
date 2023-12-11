@@ -17,7 +17,6 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
 
     - name: Sync Key Vault Secrets
       run: |
@@ -38,7 +37,3 @@ jobs:
 
       env:
         AZURE_KEYVAULT_URI: https://$sourceKeyVault.vault.azure.net/
-
-          # Set the secret status separately using az keyvault secret set-attributes
-          az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled $secretStatus > /dev/null
-        done
