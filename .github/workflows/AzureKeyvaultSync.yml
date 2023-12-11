@@ -14,8 +14,8 @@ jobs:
     - name: Check Azure CLI version
       run: az --version
 
-    # - name: Azure login
-    #   id: login
-    #   uses: azure/login@v1.4.3
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Azure login
+      id: login
+      uses: azure/login@v1.4.3
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
