@@ -1,1 +1,21 @@
+name: Example Workflow
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set environment variable
+      run: echo "MY_VARIABLE=my_value" >> $GITHUB_ENV
+      
+    - name: Debugging
+      run: cat $GITHUB_ENV
+
+
+    - name: Use environment variable
+      run: echo "The value of MY_VARIABLE is $MY_VARIABLE"
