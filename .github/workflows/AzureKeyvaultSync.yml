@@ -41,8 +41,11 @@ jobs:
 
           # Set the secret in the destination Key Vault
           if [ -z "$secretExpiration" ]; then
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" --content-type "$secretType" --tags "$secretTags" --enabled "$secretStatus" > /dev/null
+            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" --content-type "$secretType" --tags "$secretTags" > /dev/null
           else
-            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" --content-type "$secretType" --expires "$secretExpiration" --tags "$secretTags" --enabled "$secretStatus" > /dev/null
+            az keyvault secret set --vault-name $destinationKeyVault --name $secret --value "$secretValue" --content-type "$secretType" --expires "$secretExpiration" --tags "$secretTags" > /dev/null
           fi
+
+          # Set the secret status separately using az keyvault secret set-attributes
+          az keyvault secret set-attributes --vault-name $destinationKeyVault --name $secret --enabled $secretStatus > /dev/null
         done
