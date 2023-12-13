@@ -13,9 +13,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
+
+      - name: Set secret name
+        id: set-secret-name
+        run: echo "SECRET_NAME=${{ inputs.test }}_IDENTITY01" >> $GITHUB_ENV
+
       - name: Login via Azure CLI
         id: az-login
         run: |
-          az login --identity --username ${{ secrets[inputs.test + '_IDENTITY01'] }}
+          az login --identity --username ${{ secrets.SECRET_NAME }}
 
