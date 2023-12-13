@@ -2,30 +2,24 @@ on:
   push:
     branches:
       - main
-    inputs:
-      region:
-        required: true
-        type: string
-        default: asse
+
 jobs:
   test-az-login:
     runs-on: self-hosted
+    inputs:
+      region:
+        description: 'Specify the region'
+        required: true
+        type: string
+        default: 'asse'
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Azure Login
-        uses: azure/login@v1
-        with:
-          az login --identity --username: ${{secrets.TEST_SECRET01}}
+        run: az login --identity --username ${{secrets.TEST_SECRET01}}
 
       - name: Conditional Azure Login
         if: ${{ needs.test-az-login.outputs.region == 'asea' }}
-        uses: azure/login@v1
-        with:
-          az login --identity --username: ${{secrets.TEST_SECRET02}}
-
-
-
-
+        run: az login --identity --username ${{secrets.TEST_SECRET02}}
