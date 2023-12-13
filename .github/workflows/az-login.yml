@@ -2,11 +2,6 @@ on:
   push:
     branches:
       - main
-    inputs:
-      test:
-        required: true
-        type: string
-        default: TEST
 jobs:
   test-az-login:
     runs-on: self-hosted
@@ -14,12 +9,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set secret name
-        id: set-secret-name
-        run: echo "SECRET_NAME=${{ inputs.test }}_IDENTITY01" >> $GITHUB_ENV
-
-      - name: Login via Azure CLI
-        id: az-login
-        run: |
-          az login --identity --username ${{ env.SECRET_NAME }}
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ runner.os == 'Linux' && secrets.TEST_SECRET01 || runner.os == 'self-hosted' && secrets.TEST_SECRET02 }}
 
