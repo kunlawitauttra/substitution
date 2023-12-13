@@ -20,8 +20,8 @@ jobs:
       - name: Login via Azure CLI
         id: az-login
         run: |
-          if [ "${{ inputs.region }}" == 'asea' ]; then
+          if [ "${{ inputs.region }}" == 'asse' ]; then
             az login --identity --username "${{ secrets.TEST_IDENTITY01 }}"
           else
-            az login --identity --username "${{ secrets.TEST_IDENTITY02 }}"
+            az login --identity --username "${{ secrets.TEST_IDENTITY02X }}"
           fi
