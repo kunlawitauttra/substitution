@@ -18,3 +18,4 @@ jobs:
         id: az-login
         run: |
           az login --identity --username ${{ secrets[inputs.test + '_IDENTITY01'] }}
+
