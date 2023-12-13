@@ -1,21 +1,20 @@
-name: Example Workflow
-
-# on:
-#   push:
-#     branches:
-#       - main
-
+on:
+  workflow_dispatch:
+    branches:
+      - main
 jobs:
-  example-job:
+  sync-keyvault:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Set environment variable
-      run: echo "MY_VARIABLE=my_value" >> $GITHUB_ENV
-      
-    - name: Debugging
-      run: cat $GITHUB_ENV
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
+    - name: Set GITHUB_ENV
+      run: |
+          # Format AZURE_CREDENTIALS as JSON and append to GITHUB_ENV
+          echo "creds=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -c)" >> $GITHUB_ENV
 
-    - name: Use environment variable
-      run: echo "The value of MY_VARIABLE is $MY_VARIABLE"
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ env.creds }}
