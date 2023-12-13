@@ -1,14 +1,15 @@
-name: build_deploy_aks
+name: test-az-login
 on:
   workflow_dispatch:
     inputs:
       region:
-        description: 'Please select your cluster'
+        description: 'Please select your region'
         required: true
         type: choice
         options:
-         - asse
-         - asea
+          - asse
+          - asea
+
 jobs:
   test-az-login:
     runs-on: self-hosted
@@ -16,14 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{secrets.TEST_SECRET01}}
-
-      - name: Conditional Azure Login
-        if: ${{ inputs.region == 'asea' }}
-        uses: azure/login@v1
-        with:
-          creds: ${{secrets.TEST_SECRET02}}
+      - name: Login via Azure CLI
+        id: az-login
+        run: |
+          if [ "${{ inputs.region }}" == 'asea' ]; then
+            az login --identity --username "${{ secrets.TEST_SECRET01 }}"
+          else
+            az login --identity --username "${{ secrets.TEST_SECRET02 }}"
         
