@@ -24,4 +24,5 @@ jobs:
             az login --identity --username "${{ secrets.TEST_SECRET01 }}"
           else
             az login --identity --username "${{ secrets.TEST_SECRET02 }}"
+          fi
         
