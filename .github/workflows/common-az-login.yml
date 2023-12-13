@@ -1,0 +1,15 @@
+name: common-az-login
+on:
+  workflow_dispatch:
+jobs:
+  test-az-login:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login via Azure CLI
+        id: az-login
+        run: |
+            az login --identity --username "${{ secrets.TEST_SECRET01 }}"
+            az login --identity --username "${{ secrets.TEST_SECRET02 }}"
