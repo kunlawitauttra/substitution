@@ -3,7 +3,7 @@ on:
     branches:
       - main
 jobs:
-  sync-keyvault:
+  test-az-login:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
