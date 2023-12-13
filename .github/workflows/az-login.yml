@@ -2,7 +2,6 @@ on:
   workflow_dispatch:
     branches:
       - main
-
 jobs:
   test-az-login:
     runs-on: ubuntu-latest
