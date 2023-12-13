@@ -3,7 +3,7 @@ on:
     branches:
       - main
     inputs:
-      CREDENTIALS:
+      creds:
         required: true
         type: string
         default: secrets.AZURE_CREDENTIALS
@@ -20,7 +20,7 @@ jobs:
 
     - uses: azure/login@v1
       with:
-        creds: ${{ inputs.CREDENTIALS }}
+        creds: ${{ inputs.creds }}
 
     - name: Sync secrets
       run: |
