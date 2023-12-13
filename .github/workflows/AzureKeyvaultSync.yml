@@ -2,11 +2,6 @@ on:
   workflow_dispatch:
     branches:
       - main
-    inputs:
-      creds:
-        required: true
-        type: string
-        default: secrets.AZURE_CREDENTIALS
 jobs:
   sync-keyvault:
     runs-on: ubuntu-latest
@@ -16,7 +11,7 @@ jobs:
 
     - name: Set GITHUB_ENV
       run: |
-          echo "creds"=${{ secrets.AZURE_CREDENTIALS }}" >> $GITHUB_ENV
+          echo "creds=${{ secrets.AZURE_CREDENTIALS }}" >> $GITHUB_ENV
 
     - uses: azure/login@v1
       with:
