@@ -12,5 +12,5 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ runner.os == 'Linux' && secrets.TEST_SECRET01 || runner.os == 'self-hosted' && secrets.TEST_SECRET02 }}
+          creds: ${{ inputs.region == 'asse' && secrets.TEST_SECRET01 || inputs.region == 'asea' && secrets.TEST_SECRET02 }}
 
