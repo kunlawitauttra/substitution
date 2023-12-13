@@ -8,7 +8,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Set GITHUB_ENV
+        
+      - name: Login via Azure CLI
+        id: az-login
         run: |
-          echo ${{ secrets.TEST_SECRET01 }}
+          az login --identity --username ${{ secrets.TEST_IDENTITY01 }}
+          az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
