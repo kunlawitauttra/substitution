@@ -10,17 +10,17 @@ on:
 jobs:
   sync-keyvault:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Check Azure CLI version
-      run: az --version
+    - name: Set GITHUB_ENV
+      run: |
+          echo "creds"=${{ secrets.AZURE_CREDENTIALS }}" >> $GITHUB_ENV
 
     - uses: azure/login@v1
       with:
-        creds: ${{ inputs.creds }}
+        creds: ${{ env.creds }}
 
     - name: Sync secrets
       run: |
