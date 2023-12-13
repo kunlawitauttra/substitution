@@ -17,4 +17,4 @@ jobs:
       - name: Login via Azure CLI
         id: az-login
         run: |
-          az login --identity --username ${{ secrets.${{inputs.test}}_IDENTITY01 }}
+          az login --identity --username ${{ secrets[inputs.test + '_IDENTITY01'] }}
