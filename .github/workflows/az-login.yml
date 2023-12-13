@@ -12,5 +12,5 @@ jobs:
       - name: Login via Azure CLI
         id: az-login
         run: |
-          az login --identity --username ${{ secrets.TEST_IDENTITY01 }}
+          az login --identity --username ${{ secrets.TEST_IDENTITY02 }}
           az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
