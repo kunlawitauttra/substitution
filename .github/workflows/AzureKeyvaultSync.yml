@@ -12,8 +12,10 @@ jobs:
     - name: Set GITHUB_ENV
       run: |
           echo "creds=${{ secrets.AZURE_CREDENTIALS }}" >> $GITHUB_ENV
+          echo "export creds=${{ secrets.AZURE_CREDENTIALS }}" >> $GITHUB_ENV
 
-    - uses: azure/login@v1
+    - name: Azure Login
+      uses: azure/login@v1
       with:
         creds: ${{ env.creds }}
 
