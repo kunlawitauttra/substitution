@@ -2,6 +2,12 @@ on:
   push:
     branches:
       - main
+inputs:
+  region:
+    required: true
+    type: string
+    default: asse
+
 jobs:
   test-az-login:
     runs-on: self-hosted
@@ -12,5 +18,12 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ inputs.region == 'asse' && secrets.TEST_SECRET01 || inputs.region == 'asea' && secrets.TEST_SECRET02 }}
+          creds: ${{secrets.TEST_SECRET01}}
+
+      - name: Conditional Azure Login
+        if: ${{ inputs.region == 'asea' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.TEST_SECRET02}}
+
 
