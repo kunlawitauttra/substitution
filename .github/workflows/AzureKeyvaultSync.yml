@@ -20,7 +20,7 @@ jobs:
 
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_${{inputs.CREDENTIALS}} }}
+        creds: ${{ secrets.AZURE_${{ inputs.CREDENTIALS }} }}
 
     - name: Sync secrets
       run: |
