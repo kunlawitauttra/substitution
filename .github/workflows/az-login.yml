@@ -1,5 +1,5 @@
 on:
-  workflow_dispatch:
+  push:
     branches:
       - main
 jobs:
@@ -11,5 +11,4 @@ jobs:
 
       - name: Set GITHUB_ENV
         run: |
-          echo "TEST_SECRET01=${{ secrets.TEST_SECRET01 }}" >> $GITHUB_ENV
-          echo "TEST_SECRET02=${{ secrets.TEST_SECRET02 }}" >> $GITHUB_ENV
+          echo ${{ secrets.TEST_SECRET01 }}
