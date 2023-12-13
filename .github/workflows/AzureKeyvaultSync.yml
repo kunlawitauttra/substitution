@@ -13,7 +13,7 @@ jobs:
       run: |
           # Format AZURE_CREDENTIALS as JSON and append to GITHUB_ENV
           echo "creds=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -c)" >> $GITHUB_ENV
-
+          
     - name: Azure Login
       uses: azure/login@v1
       with:
