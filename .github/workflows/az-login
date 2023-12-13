@@ -1,0 +1,15 @@
+on:
+  workflow_dispatch:
+    branches:
+      - main
+jobs:
+  sync-keyvault:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set GITHUB_ENV
+      run: |
+          echo ${{ secrets.TEST_SECRET01 }}
+          echo ${{ secrets.TEST_SECRET02 }}
