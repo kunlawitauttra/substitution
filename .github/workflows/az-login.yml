@@ -21,8 +21,7 @@ jobs:
         id: az-login
         run: |
           if [ "${{ inputs.region }}" == 'asea' ]; then
-            az login --identity --username "${{ secrets.secrets.TEST_IDENTITY01 }}"
+            az login --identity --username "${{ secrets.TEST_IDENTITY01 }}"
           else
-            az login --identity --username "${{ secrets.secrets.TEST_IDENTITY02 }}"
+            az login --identity --username "${{ secrets.TEST_IDENTITY02 }}"
           fi
-        
