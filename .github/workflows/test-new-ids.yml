@@ -1,4 +1,4 @@
-name: List Files in github/config
+name: List Files
 
 on:
   workflow_dispatch:
@@ -12,8 +12,4 @@ jobs:
 
       - name: List files and directories
         run: |
-          ls -l github/config
-
-
-
-
+          ls -l
