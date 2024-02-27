@@ -15,7 +15,7 @@ jobs:
 
       - name: "Deploy path"
         run: |
-          for service in ./config/*; do 
+          for service in ./config/config01/*; do 
               echo "Service path: $service"
           done
 
