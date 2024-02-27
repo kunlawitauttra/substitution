@@ -23,4 +23,5 @@ jobs:
                 
             done
           done
+          echo $service
           echo $basename
