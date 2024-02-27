@@ -16,15 +16,10 @@ jobs:
       - name: "Deploy path"
         run: |
           for service in ./config/config01/*; do 
-           echo $service  
             service="${service##*/}"
             for filepath in ./config/config01/${service}/*-${{ env.ENVIRONMENT }}.json; do
                 filename="${filepath##*/}"
                 basename="${filename%.*}"
-
-
-            echo $basename
-            echo $filename
                 
             done
           done
