@@ -21,7 +21,7 @@ jobs:
                 filename="${filepath##*/}"
                 basename="${filename%.*}"
 
-            echo $basename
+            echo $filepath
                 
             done
           done
