@@ -17,12 +17,9 @@ jobs:
         run: |
           for service in .github/config/config01/*; do 
             service="${service##*/}"
-            for filepath in .github/config/config01/${service}; do
+            for filepath in .github/config/config01/${service}/*-${{ env.ENVIRONMENT }}.json; do
                 filename="${filepath##*/}"
                 basename="${filename%.*}"
-            echo $filepath
-
-            echo $filename
 
             echo $basename
                 
