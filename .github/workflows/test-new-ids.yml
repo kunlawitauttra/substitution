@@ -15,7 +15,12 @@ jobs:
 
       - name: "Deploy path"
         run: |
-          for service in ./config/config01/*; do 
-              echo "Service path: $service"
+          for filepath in ./config/config01/*; do
+            if [ -f "$filepath" ]; then
+              filename=$(basename "$filepath")
+              echo "Processing file: $filename"
+              # Your further operations with each file can go here
+            fi
           done
+
 
