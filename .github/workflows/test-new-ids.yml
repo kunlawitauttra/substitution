@@ -1,0 +1,25 @@
+name: test-new-ids
+
+on:
+  workflow_dispatch:
+  
+env:
+  ENVIRONMENT: "asea"
+
+jobs:
+  test-path-login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: "Deploy path"
+        run: |
+          for service in ./config/*; do 
+            service="${service##*/}"
+            for filepath in ./config/config01/${service}/*-${{ env.ENVIRONMENT }}.json; do
+                filename="${filepath##*/}"
+                basename="${filename%.*}"
+                
+            done
+          done
