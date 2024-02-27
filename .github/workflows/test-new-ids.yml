@@ -1,16 +1,21 @@
-name: List .github/config
+name: test-new-ids
 
 on:
   workflow_dispatch:
+  
+env:
+  ENVIRONMENT: "asea"
 
 jobs:
-  list_files:
+  test-path-login:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: List .github/config directory
-      run: ls -R .github/config
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: "Deploy path"
+        run: |
+          for service in .github/config/config01/*; do 
+              echo "Service path: $service"
+          done
 
