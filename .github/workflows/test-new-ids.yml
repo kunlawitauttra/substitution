@@ -17,6 +17,5 @@ jobs:
         run: |
           for service in ./config/config01/*; do 
               echo "Service path: $service"
-                
-            done
           done
+
