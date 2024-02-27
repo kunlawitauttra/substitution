@@ -21,5 +21,4 @@ jobs:
               echo $basename
                   
               done
-            done
 
