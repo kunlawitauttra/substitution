@@ -12,9 +12,12 @@ jobs:
 
       - name: "Deploy path"
         run: |
-          for filepath in ./config/config01/*; do
-            echo "File: $(basename "$filepath")"
-            echo "Path: $filepath"
+          for filepath_outer in ./config/config01/*; do
+            for filepath_inner in "$filepath_outer"/*; do
+              echo "File: $(basename "$filepath_inner")"
+              echo "Path: $filepath_inner"
+            done
           done
+
 
 
