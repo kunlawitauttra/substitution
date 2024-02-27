@@ -20,7 +20,10 @@ jobs:
             for filepath in ./config/config01/${service}/*-${{ env.ENVIRONMENT }}.json; do
                 filename="${filepath##*/}"
                 basename="${filename%.*}"
+
+            echo $service  
+            echo $basename
+            echo $filename
                 
             done
           done
-          echo $service
