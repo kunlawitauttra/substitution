@@ -1,18 +1,19 @@
-name: test-new-ids
+name: List Files in github/config
 
 on:
   workflow_dispatch:
   
 jobs:
-  test-path-login:
+  list-files:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: "Deploy path"
+      - name: List files and directories
         run: |
-          ls /config
+          ls -l github/config
+
 
 
 
