@@ -16,6 +16,14 @@ jobs:
       - name: "Deploy path"
         run: |
           for service in .github/config/config01/*; do 
-              echo "Service path: $service"
+            service="${service##*/}"
+            for filepath in ./config/config01/${service}/*-${{ env.ENVIRONMENT }}.json; do
+                filename="${filepath##*/}"
+                basename="${filename%.*}"
+            echo $service
+            echo $filepath
+            echo $basename
+                
+            done
           done
 
