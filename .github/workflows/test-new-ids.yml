@@ -3,9 +3,6 @@ name: test-new-ids
 on:
   workflow_dispatch:
   
-env:
-  ENVIRONMENT: "asea"
-
 jobs:
   test-path-login:
     runs-on: ubuntu-latest
@@ -16,11 +13,8 @@ jobs:
       - name: "Deploy path"
         run: |
           for filepath in ./config/config01/*; do
-            if [ -f "$filepath" ]; then
-              filename=$(basename "$filepath")
-              echo "Processing file: $filename"
-              # Your further operations with each file can go here
-            fi
+            echo "File: $(basename "$filepath")"
+            echo "Path: $filepath"
           done
 
 
