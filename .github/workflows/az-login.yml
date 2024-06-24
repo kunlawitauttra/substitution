@@ -14,4 +14,7 @@ jobs:
           TEST_IDENTITY01: ${{ secrets.TEST_IDENTITY01 }}
         run: |
           echo $TEST_IDENTITY01 >> secrets.txt
+          
+      - name: check secrets
+        run: |
           cat secrets.txt
