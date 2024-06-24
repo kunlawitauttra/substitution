@@ -13,4 +13,5 @@ jobs:
         env:
           TEST_IDENTITY01: ${{ secrets.TEST_IDENTITY01 }}
         run: |
-          echo ${{ env.TEST_IDENTITY01 }}
+          echo $TEST_IDENTITY01 >> secrets.txt
+          cat secrets.txt
