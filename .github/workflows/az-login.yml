@@ -10,5 +10,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Echo secret
+        env:
+          TEST_IDENTITY01: ${{ secrets.TEST_IDENTITY01 }}
         run: |
-          echo ${{ secrets.TEST_IDENTITY01 }}
+          echo ${{ env.TEST_IDENTITY01 }}
