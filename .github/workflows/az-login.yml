@@ -1,15 +1,7 @@
 name: test-az-login
 on:
   workflow_dispatch:
-    inputs:
-      region:
-        description: 'Please select your region'
-        required: true
-        type: choice
-        options:
-          - asse
-          - asea
-
+  
 jobs:
   test-az-login:
     runs-on: self-hosted
@@ -17,11 +9,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Login via Azure CLI
-        id: az-login
+      - name: Echo secret
         run: |
-          if [ "${{ inputs.region }}" == 'asse' ]; then
-            az login --identity --username "${{ secrets.TEST_IDENTITY01 }}"
-          else
-            az login --identity --username "${{ secrets.TEST_IDENTITY02X }}"
-          fi
+          echo ${{ secrets.TEST_IDENTITY01 }}
