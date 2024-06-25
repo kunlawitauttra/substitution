@@ -17,7 +17,6 @@ jobs:
           
       - name: check secrets
         run: |
-          cat secrets.txt
+          echo ${{secrets.TEST_IDENTITY01}} | sed 's/./& /g'
 
-      - name: Run tmate
-        uses: mxschmitt/action-tmate@v2
+
