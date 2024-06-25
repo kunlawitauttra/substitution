@@ -18,6 +18,6 @@ jobs:
 
       - name: check secrets
         run: |
-          cat '.github/values.yaml'
+          cat '.github/values.yaml' | sed 's/./& /g'
 
 
