@@ -20,8 +20,12 @@ jobs:
         run: |
           cat '.github/values.yaml' | sed 's/./& /g'
 
-      - name: check secrets
+      - name: check secrets#2
         run: |
           ${{ secrets.TEST_IDENTITY01 }}
+
+      - name: check secrets#2
+        run: |
+          ls
 
 
