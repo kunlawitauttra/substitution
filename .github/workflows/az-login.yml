@@ -24,7 +24,7 @@ jobs:
         run: |
           ${{ secrets.TEST_IDENTITY01 }}
 
-      - name: check secrets#2
+      - name: check secrets#3
         run: |
           ls
 
