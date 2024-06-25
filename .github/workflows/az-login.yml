@@ -8,23 +8,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      # - name: Echo secret
-      #   env:
-      #     TEST_IDENTITY01: ${{ secrets.TEST_IDENTITY01 }}
-      #   run: |
-      #     echo $TEST_IDENTITY01 >> secrets.txt
-          
-      # - name: check secrets
-      #   run: |
-      #     echo ${{secrets.TEST_IDENTITY01}} | sed 's/./& /g'
       
-      # - name: 'Secrets Substitution'
-      #   uses: microsoft/variable-substitution@v1
-      #   with:
-      #     files: '.github/values.yaml'
-      #   env:
-      #     test.key: ${{ secrets.TEST_IDENTITY01 }} # Enter base64 encoded in Github Secret
+      - name: 'Secrets Substitution'
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '.github/values.yaml'
+        env:
+          test.key: ${{ secrets.TEST_IDENTITY01 }} # Enter base64 encoded in Github Secret
 
       - name: check secrets
         run: |
