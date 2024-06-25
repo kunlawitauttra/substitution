@@ -26,6 +26,6 @@ jobs:
 
       - name: check secrets#3
         run: |
-          ls
+          pwd
 
 
